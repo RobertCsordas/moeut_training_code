@@ -1,0 +1,119 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "C4 baseline small",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "console": "integratedTerminal",
+            "args": [
+                "-task", "c4_transformer", "-test_interval", "2000", "-state_size", "412",
+                "-transformer.ff_multiplier", "4.985", "-transformer.encoder_n_layers", "16",
+                "-transformer.n_heads", "10", "-dropout", "0.0", "-lr", "0.00025", "-optimizer", "adamw",
+                "-lm.unroll", "1024", "-batch_size", "64", "-grad_clip", "0.1", "-amp", "1",
+                "-save_interval", "10000", "-transformer.variant", "preln_rope", "-stop_after", "100000",
+                "-lr_sched.type", "cos", "-transformer.head_projection_size", "41", "-lmds.valid_ratio", "0.005",
+                "-wd", "0.01", "-lm.trafo.context_blocks", "0", "-min_lr_multiplier", "0.1",
+                "-details_log_interval", "500", "-name", "c4_baseline_small_rope_long_nodrop",
+                "-name", "c4_baselune_small", "-log", "tb", "-reset", "1", "-lm.eval.enabled", "0", "-lm.unroll", "128",
+                "-batch_size", "8"
+            ]
+        },
+
+
+        {
+            "name": "C4 MoEUT small",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "console": "integratedTerminal",
+            "args": [
+                "-task", "c4_transformer", "-test_interval", "2000", "-state_size", "412",
+                "-transformer.encoder_n_layers", "16", "-transformer.n_heads", "4", "-dropout", "0.0",
+                "-moe.drop_expert", "0.0", "-lr", "0.00025", "-optimizer", "adamw", "-lm.unroll", "1024",
+                "-batch_size", "64", "-grad_clip", "0.1", "-amp", "1", "-save_interval", "10000",
+                "-transformer.variant", "preln_moe_universal", "-stop_after", "100000", "-moe.n_experts", "155",
+                "-moe.expert_size", "128", "-pkm.n_heads", "12",
+                "-transformer.p_drop_layer", "0.0", "-moe.selection_mode", "sigmoid",
+                "-moe.perplexity_reg_mode", "layers_time",
+                "-moe.perplexity_reg", "0.01", "-moe.att.perplexity_reg", "0.001",
+                 "-moe.att.selection_dropout", "0.0",
+                 "-lr_sched.type", "cos", "-lmds.valid_ratio", "0.005",
+                "-moe.att.enable", "1", "-moe.att.n_experts", "8",
+                "-moe.att.selection_mode", "sigmoid", "-moe.att.k", "2", "-moe.att.expert_dropout", "0.0",
+                "-n_microbatch", "1", "-transformer.head_projection_size", "82",
+                "-transformer.universal.group_size", "2", "-wd", "0.01",
+                "-moe.att.q_expert", "0", "-moe.att.k_expert", "0", "-moe.att.v_expert", "1",
+                "-moe.att.o_expert", "1", "-lm.trafo.context_blocks", "0", "-min_lr_multiplier", "0.1",
+                "-details_log_interval", "500", "-lm.eval.enabled", "0", "-moe.nonorm", "1",
+                "-name", "c4_moeut_small", "-log", "tb", "-reset", "1", "-lm.eval.enabled", "0", "-lm.unroll", "128",
+                "-batch_size", "8"
+            ]
+        },
+
+        {
+            "name": "C4 SUT small",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "console": "integratedTerminal",
+            "args": [
+                "-name", "sut", "-task", "c4_transformer", "-test_interval", "2000", "-state_size", "412",
+                "-transformer.encoder_n_layers", "16", "-dropout", "0.0", "-lr", "0.00025", "-optimizer", "adamw",
+                "-lm.unroll", "1024", "-batch_size", "64", "-grad_clip", "0.1", "-amp", "1",
+                "-save_interval", "10000", "-transformer.variant", "actsut_universal", "-stop_after", "100000",
+                "-moe.n_experts", "152", "-moe.expert_size", "256", "-pkm.n_heads", "2", "-lr_sched.type", "cos",
+                "-lr_warmup", "0", "-moe.att.n_experts", "24", "-moe.att.k", "2", "-lmds.valid_ratio", "0.005",
+                "-lm.trafo.norm_input", "1", "-transformer.head_projection_size", "64",
+                "-moe.att.expert_size", "256", "-moa.miloss", "0.001", "-wd", "0.01",
+                "-lm.trafo.context_blocks", "0", "-min_lr_multiplier", "0.1", "-transformer.act_loss", "0.01",
+                "-details_log_interval", "500", "-lm.eval.enabled", "0", "-n_microbatch", "2",
+                "-name", "c4_sut_small", "-log", "tb", "-reset", "1", "-lm.eval.enabled", "0", "-lm.unroll", "128",
+                "-batch_size", "8"
+            ]
+        },
+
+        {
+            "name": "C4 MoEUT small validation",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "console": "integratedTerminal",
+            "args": [
+                "-task", "c4_transformer", "-test_interval", "2000", "-state_size", "412",
+                "-transformer.encoder_n_layers", "16", "-transformer.n_heads", "4", "-dropout", "0.0",
+                "-moe.drop_expert", "0.0", "-lr", "0.00025", "-optimizer", "adamw", "-lm.unroll", "1024",
+                "-batch_size", "64", "-grad_clip", "0.1", "-amp", "1", "-save_interval", "10000",
+                "-transformer.variant", "preln_moe_universal", "-stop_after", "100000", "-moe.n_experts", "155",
+                "-moe.expert_size", "128", "-pkm.n_heads", "12",
+                "-transformer.p_drop_layer", "0.0", "-moe.selection_mode", "sigmoid",
+                "-moe.perplexity_reg_mode", "layers_time",
+                "-moe.perplexity_reg", "0.01", "-moe.att.perplexity_reg", "0.001",
+                 "-moe.att.selection_dropout", "0.0",
+                 "-lr_sched.type", "cos", "-lmds.valid_ratio", "0.005",
+                "-moe.att.enable", "1", "-moe.att.n_experts", "8",
+                "-moe.att.selection_mode", "sigmoid", "-moe.att.k", "2", "-moe.att.expert_dropout", "0.0",
+                "-n_microbatch", "1", "-transformer.head_projection_size", "82",
+                "-transformer.universal.group_size", "2", "-wd", "0.01",
+                "-moe.att.q_expert", "0", "-moe.att.k_expert", "0", "-moe.att.v_expert", "1",
+                "-moe.att.o_expert", "1", "-lm.trafo.context_blocks", "0", "-min_lr_multiplier", "0.1",
+                "-details_log_interval", "500", "-lm.eval.enabled", "0", "-moe.nonorm", "1",
+                "-name", "c4_moeut_small_validation", "-log", "tb", "-reset", "1", "-lm.eval.enabled", "1", "-lm.unroll", "128",
+                "-batch_size", "8",
+                "-lm.eval.cbt.enabled", "1", "-lm.eval.hellaswag.enabled", "1", "-lm.eval.piqa.enabled", "1",
+                "-lm.eval.blimp.enabled", "1", "-lm.eval.ai2arc.enabled", "1"
+            ]
+        },
+
+        {
+            "type": "debugpy",
+            "request": "launch",
+            "name": "Debug File",
+            "justMyCode": false,
+            "program": "${file}",
+            "cwd": "${fileDirname}"
+        }
+
+    ]
+}
