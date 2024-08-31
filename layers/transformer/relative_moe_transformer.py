@@ -143,7 +143,7 @@ class RelativeMoeTransformerEncoderLayer(LoggingLayer, torch.nn.Module):
                               pos_offset=pos_offset)
         src = src + self.dropout(src2)
 
-        mlp_input = ninput
+        mlp_input = src
 
         if self.preln:
             src2 = self.norm2(mlp_input)
