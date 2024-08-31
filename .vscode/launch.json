@@ -107,6 +107,19 @@
         },
 
         {
+            "name": "Validate a pretrained model",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "console": "integratedTerminal",
+            "args": [
+                "-restore", "checkpoints/C4_44M.ckpt",
+                "-test_only", "1", "-log", "tb", "-name", "test", "-reset", "1",
+                "-lm.eval.enabled", "0", "-stop_after", "0"
+            ]
+        },
+
+        {
             "type": "debugpy",
             "request": "launch",
             "name": "Debug File",

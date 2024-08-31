@@ -23,6 +23,30 @@ https://docs.wandb.com/quickstart.
 
 For plotting, LaTeX is required (to avoid Type 3 fonts and to render symbols). Installation is OS specific.
 
+## Pretrained Model Checkpoints
+
+We released the model checkpoints from our paper for all of our MoEUT models. They can be found at https://huggingface.co/robertcsordas/moeut_training_checkpoints.
+
+**NOTE**: These are not production quality pretrained models, but only a proof of concept. Because of our limited resources, they are only trained on 6.5B tokens which is very little with modern standards.
+
+The structure of the checkpoint repository:
+```
+├───cache - Tokenizers for the different datasets
+└───checkpoints - Model checkpoints
+```
+
+The ``cache`` folder contains our tokenizers and must be copied to this folder in order to avoid minor differences that can happen if different version of SentencePiece is used than ours. When a specific task is run, it will automatically download the necessary data and tokenize it. It only tokenizes the amount of data actually needed for training/evaluation to avoid wasting space and time.
+
+The checkpoints folder contains all the model checkpoints (without the optimizer state which we removed to save space). It can be loaded with ``--restore checkpoints/C4_44M.ckpt``. It automatically resotres all configurations used for training.
+
+In order to run a simple validation pass, you can run:
+
+```bash
+python3 main.py -restore checkpoints/C4_44M.ckpt -test_only 1 -log tb -name test -reset 1 -lm.eval.enabled 0 -stop_after 0
+```
+
+The flag ``-log tb`` is used to switch to tensorboard logging instead of W&B which was used for the training run, ``-lm.eval.enabled 0`` disables the costly downstream evals. ``-stop_after 0`` is a hack to avoid wasting exessive amount of time on tokenizing training data which will not be used for evaluation anywas (sorry, this could be handled better). For the other flags, see the details at the end of this doc.
+
 ## Usage
 
 The code makes use of Weights and Biases for experiment tracking. In the "sweeps" directory, we provide sweep configurations for all experiments we have performed.
@@ -69,7 +93,7 @@ python3 main_result_table.py
 ## Useful built-in arguments
 
 - `-task`: which task to use. Tasks are picked up from tasks directory automatically. See how to create a new task in the `Creating a new task` chapter.
-- `-name`: state will be saved in `save/<name>` folder.
+- `-name`: state will be saved in `save/<name>` folder. Necessary to provide if using TB.
 - `-restore <checkpoint file>`: restores everything, including the command line arguments, from a checkpoint file. If any other argument is specified, it overwrites the one found in the checkpoint.
 - `-reset 1`: do not load checkpoint from `save/<name>` but restart training.
 - `-log`: can be `tb` for tensorboard or `wandb` for Weights & Biases. All supported plot types are defined in `framework/visualize/plot.py` and support logging on both. If `tb` is specified, the run will start a Tensorboard session on port 7000 (or the next available)
@@ -86,6 +110,7 @@ python3 main_result_table.py
 - `-length_bucketed_sampling 1`: groups examples of similar length into batches to save compute wasted for padding. Only works for some datasets.
 - `-save_interval <n_iters>`: how often to save checkpoints.
 - `-test_interval <n_iters>`: how often to run automatic tests.
+- `-test_only 1`: run only a validation pass.
 - `-per_device_batch_size <batch size>`: specify the per-GPU batch size. Microbatching (gradient accumulation) will be used to ensure that the actual batch size is <= than the specified. Uneven division is supported.
 - `-n_microbatch <number of microbatching steps>`: manually specify the number of microbatches. Mutually exclusive with `per_device_batch_size`.
 
